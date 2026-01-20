@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.vscode
+.idea
+error.txt
+.vercel
+.env*.local
+.env.draft

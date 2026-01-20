@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; max-width: 600px;">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-color: #667eea; padding: 40px 20px; text-align: center;">
+                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: normal;">✓ Payment Confirmed</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <p style="font-size: 18px; color: #333333; margin: 0 0 20px 0;">Dear <%= user_name %>,</p>
+                            
+                            <p style="color: #555555; line-height: 1.6; margin: 0 0 30px 0;">
+                                Thank you for your payment! We're pleased to confirm that your transaction has been processed successfully.
+                            </p>
+                            
+                            <!-- Details Box -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f8f9fa; border-left: 4px solid #667eea; margin: 30px 0;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                            <!-- Event Row -->
+                                            <tr style="border-bottom: 1px solid #e0e0e0;">
+                                                <td style="font-weight: 600; color: #333333; padding: 10px 0; width: 40%;">Event:</td>
+                                                <td style="color: #555555; font-weight: bold; padding: 10px 0; text-align: right;"><%= event_title %></td>
+                                            </tr>
+                                            <!-- Amount Row -->
+                                            <tr style="border-bottom: 1px solid #e0e0e0;">
+                                                <td style="font-weight: 600; color: #333333; padding: 10px 0;">Amount Paid:</td>
+                                                <td style="padding: 10px 0; text-align: right;">
+                                                    <span style="font-size: 24px; font-weight: bold; color: #667eea;">$<%= amount %></span>
+                                                </td>
+                                            </tr>
+                                            <!-- Transaction ID Row -->
+                                            <tr style="border-bottom: 1px solid #e0e0e0;">
+                                                <td style="font-weight: 600; color: #333333; padding: 10px 0;">Transaction ID:</td>
+                                                <td style="color: #555555; padding: 10px 0; text-align: right; word-break: break-all;"><%= transaction_id %></td>
+                                            </tr>
+                                            <!-- Date Row -->
+                                            <tr>
+                                                <td style="font-weight: 600; color: #333333; padding: 10px 0;">Date:</td>
+                                                <td style="color: #555555; padding: 10px 0; text-align: right;"><%= date %></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="color: #555555; line-height: 1.6; margin: 30px 0 20px 0;">
+                                Please keep this email for your records. If you have any questions about your payment or the event, please don't hesitate to reach out to our support team.
+                            </p>
+                            
+                            <p style="color: #555555; line-height: 1.6; margin: 0 0 20px 0;">
+                                We look forward to seeing you at the event!
+                            </p>
+                            
+                            <p style="color: #555555; line-height: 1.6; margin: 0;">
+                                Best regards,<br>
+                                <strong>LinkUp Team</strong>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f8f9fa; padding: 30px; text-align: center;">
+                            <p style="color: #777777; font-size: 14px; margin: 0 0 10px 0;">&copy; <%= new Date().getFullYear() %> Your Company Name. All rights reserved.</p>
+                            <p style="color: #777777; font-size: 14px; margin: 20px 0 0 0; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                                Need help? Contact us at <%= support %>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
