@@ -19,6 +19,7 @@ import EventVote from '../voting/voting.model';
 import { VotingType } from '../voting/voting.interface';
 import { redisClient } from '../../config/redis.config';
 import { sendEmail } from '../../utils/sendMail';
+import { deleteImageFromCLoudinary } from '../../config/cloudinary.config';
 
 // CREATE USER
 const createUserService = async (payload: Partial<IUser>) => {
@@ -256,6 +257,11 @@ const userUpdateService = async (
       StatusCodes.FORBIDDEN,
       'You can only update your own profile'
     );
+  }
+
+  // Delete previous avatar from cloudinary
+  if (payload.avatar) {
+    deleteImageFromCLoudinary(user?.avatar as string);
   }
 
   // Block password update from this route
