@@ -92,20 +92,6 @@ export const sponsoredSuccessHandler = async (paymentIntent: any) => {
         sponsoredPromise,
       ]);
 
-      // WITHDRAW SPONSORSHIP AFTER DURATION END
-      setTimeout(
-        async () => {
-          await Sponsored.findByIdAndUpdate(sponsored?._id, {
-            sponsor_status: SponsorStatus.EXPIRED,
-          });
-
-          if (sponsoredPackage.type === SponsoredPackageType.BOOST) {
-            await Event.findByIdAndUpdate(metadata.event, { boosted: false });
-          }
-        },
-        Number(sponsoredPackage.duration) * 24 * 60 * 60 * 1000
-      );
-
       // NOTIFY HOST THAT HIS PAYMENT SUCCESSFULL AND HIS EVENT ARE SPONSORED
       setImmediate(async () => {
         try {
