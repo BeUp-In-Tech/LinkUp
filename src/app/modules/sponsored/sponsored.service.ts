@@ -192,6 +192,7 @@ const getRandomSponsoredEventsService = async () => {
       $match: {
         sponsor_status: SponsorStatus.APPROVED,
         sponsor_type: SponsoredPackageType.SPONSORED,
+        endDate: { $gt: new Date() }
       },
     },
     {
@@ -234,6 +235,7 @@ const getSponsoredEventsService = async (query: Record<string, string>) => {
     Sponsored.find({
       sponsor_status: SponsorStatus.APPROVED,
       sponsor_type: SponsoredPackageType.SPONSORED,
+      endDate: { $gt: new Date() },
     })
       .populate({
         path: 'payment',
