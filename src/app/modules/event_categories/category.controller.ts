@@ -29,7 +29,7 @@ const getEventCategory = CatchAsync(
     const result = await categoryServices.getEventCategoryService(isDeleted);
     SendResponse(res, {
       success: true,
-      statusCode: StatusCodes.CREATED,
+      statusCode: StatusCodes.OK,
       message: 'Category fetched success!',
       data: result,
     });
