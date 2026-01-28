@@ -94,6 +94,11 @@ const sponsoredPaymentIntentService = async (
   // USER
   const user = (await User.findOne({ _id: userId })) as IUser;
 
+  const pkgType =
+    sponsoredPackage.type === SponsoredPackageType.SPONSORED
+      ? SponsoredPackageType.SPONSORED
+      : ISponsored.BOOSTED;
+
   // CHECK PENDING SPONSORSHIP
   let sponsored = await Sponsored.findOne({
     event: eventId,
@@ -102,19 +107,27 @@ const sponsoredPaymentIntentService = async (
   });
 
   // ALREADY APPROVED SPONSOSHIP
-  const alreadySponsored = await Sponsored.findOne({
-    event: eventId,
-    sponsor_status: SponsorStatus.APPROVED,
-    user: userId,
-  });
+const alreadySponsored = await Sponsored.findOne({
+  event: eventId,
+  sponsor_status: SponsorStatus.APPROVED,
+  sponsor_type: pkgType,
+  user: userId,
+  endDate: { $gt: new Date() },   // only active
+}).sort({ endDate: -1 });          // latest
 
-  if ((alreadySponsored?.endDate as Date) > new Date()) {
-    throw new AppError(
-      StatusCodes.CONFLICT,
-      `Already sponsored as ${alreadySponsored?.sponsor_type}. You cannot ${alreadySponsored?.sponsor_type} again until the current sponsorship ends.`
-    );
-  }
 
+
+// SAME SPONSORESHIP CAN'T SPONOSRED UNTILL CURRENT SPONSORESHIP EXPIRED
+if (alreadySponsored) {
+  throw new AppError(
+    StatusCodes.CONFLICT,
+    `You already  ${alreadySponsored.sponsor_type} this event!`
+  );
+}
+
+
+
+// PAYMENT INITIALIZATION
   let payment;
 
   if (!sponsored) {
@@ -174,7 +187,7 @@ const sponsoredPaymentIntentService = async (
   }
 
   // Create the payment intent
-  const idempotencyKey = `sponsored_intent_${sponsored._id.toString()}_${new Date().toISOString()}`;
+  const idempotencyKey = `sponsored_intent_${sponsored._id.toString()}`;
   const paymentIntent = await stripe.paymentIntents.create(paymentIntentData, {
     idempotencyKey,
   });
@@ -192,7 +205,7 @@ const getRandomSponsoredEventsService = async () => {
       $match: {
         sponsor_status: SponsorStatus.APPROVED,
         sponsor_type: SponsoredPackageType.SPONSORED,
-        endDate: { $gt: new Date() }
+        endDate: { $gt: new Date() },
       },
     },
     {
