@@ -7,7 +7,7 @@ import path from 'path';
 import ejs from 'ejs';
 
 const transporter = nodemailer.createTransport({
-  secure: true,
+  secure: false,
   auth: {
     user: env.EMAIL_USER,
     pass: env.EMAIL_PASSWORD,
@@ -43,7 +43,7 @@ export const sendEmail = async ({
     const templatePath = path.join(__dirname, `templates/${templateName}.ejs`);
     const html = await ejs.renderFile(templatePath, templateData);
     await transporter.sendMail({
-      from: env.EMAIL_USER,
+      from: `"${env.EMAIL_FROM_NAME}" <${env.EMAIL_FROM}>`,
       to: to,
       cc,
       bcc,
