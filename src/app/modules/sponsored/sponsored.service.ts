@@ -84,6 +84,7 @@ const sponsoredPaymentIntentService = async (
     throw new AppError(StatusCodes.NOT_FOUND, 'No event found!');
   }
 
+  // CHECK HOST OR ORGANIZER
   if (userId !== event.host.toString()) {
     throw new AppError(
       StatusCodes.BAD_REQUEST,
