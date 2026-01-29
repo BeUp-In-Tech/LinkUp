@@ -39,6 +39,8 @@ interface EnvInterfaces {
   EMAIL_HOST: string;
   EMAIL_PORT: string;
   EMAIL_USER: string;
+  EMAIL_FROM: string;
+  EMAIL_FROM_NAME: string;
   EMAIL_PASSWORD: string;
 
   GOOGLE_OAUTH_ID: string;
@@ -103,9 +105,12 @@ const loadEnvVarbles = (): EnvInterfaces => {
     'REDIS_PORT',
     'REDIS_USERNAME',
     'REDIS_PASSWORD',
+
     'EMAIL_HOST',
     'EMAIL_PORT',
     'EMAIL_USER',
+    'EMAIL_FROM',
+    'EMAIL_FROM_NAME',
     'EMAIL_PASSWORD',
 
     'GOOGLE_OAUTH_SECRET',
@@ -180,6 +185,8 @@ const loadEnvVarbles = (): EnvInterfaces => {
 
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD as string,
     EMAIL_USER: process.env.EMAIL_USER as string,
+    EMAIL_FROM: process.env.EMAIL_FROM as string,
+    EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME as string,
     EMAIL_PORT: process.env.EMAIL_PORT as string,
     EMAIL_HOST: process.env.EMAIL_HOST as string,
 
