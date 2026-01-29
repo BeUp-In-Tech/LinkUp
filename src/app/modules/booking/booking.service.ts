@@ -85,6 +85,7 @@ const bookingIntentService = async (
 
     payment = await Payment.create({
       booking: booking._id,
+      user: isUser._id,
       transaction_amount: isEventExist.price,
       transaction_id: generateTransactionId(),
       payment_status: PaymentStatus.PENDING,
