@@ -147,6 +147,7 @@ if (alreadySponsored) {
 
     payment = await Payment.create({
       sponsored: sponsored._id,
+      user: userId,
       transaction_amount: sponsoredPackage.price,
       transaction_id: generateTransactionId(),
       payment_status: PaymentStatus.PENDING,
