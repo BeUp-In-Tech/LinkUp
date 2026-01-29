@@ -8,7 +8,7 @@ import Event from '../modules/events/event.model';
 
 // Set Boosted false, If time expired
 export const expiredBoostEventsCron = async () => {
-    cron.schedule('*/5 * * * * *', async () => {
+    cron.schedule('0 0 0 * * *', async () => {
 
     try {
          const expiredBoostEventsIds = await Sponsored.distinct('event',{
