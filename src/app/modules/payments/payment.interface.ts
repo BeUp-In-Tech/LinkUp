@@ -12,6 +12,7 @@ export interface IPayment {
   id?: string;
   booking?: Types.ObjectId;
   sponsored?: Types.ObjectId;
+  user: Types.ObjectId;
   transaction_id: string;
   transaction_amount: number;
   withdrawable_amount?: number;

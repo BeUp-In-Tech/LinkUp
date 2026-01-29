@@ -20,6 +20,8 @@ import {
   sponsoredFailedHandler,
   sponsoredSuccessHandler,
 } from '../../utils/stripe.sponsored_webhook';
+import Payment from './payment.model';
+import { PaymentStatus } from './payment.interface';
 
 // ======================  STRIPE PAYMENT QUERY ====================
 // CREATE STRIPE CONNECT ACCOUNT
@@ -189,12 +191,12 @@ const handleSponsoredWebHookService = async (req: Request) => {
 };
 
 // ======================  PAYMENT TRANSACTION QUERY ====================
-// GET TRANSACTION HISTORY
+// GET TRANSACTION HISTORY (MY)
 const getTransactionHistory = async (
   userId: string,
   query: Record<string, string>
 ) => {
-  const queryBuilder = new QueryBuilder(Booking.find({ user: userId }), query);
+  const queryBuilder = new QueryBuilder(Payment.find({ user: userId, payment_status: PaymentStatus.PAID }, { transfer_data: 0, payment_method_id: 0}), query);
 
   const transactions = await queryBuilder
     .filter()

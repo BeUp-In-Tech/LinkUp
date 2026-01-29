@@ -5,6 +5,7 @@ const paymentSchema = new Schema<IPayment>(
   {
     booking: { type: Schema.Types.ObjectId, ref: 'booking' },
     sponsored: { type: Schema.Types.ObjectId, ref: 'sponsored' },
+    user: { type: Schema.Types.ObjectId, ref: 'user' },
     transaction_id: { type: String },
     transaction_amount: { type: Number },
     withdrawable_amount: { type: Number },
