@@ -108,7 +108,8 @@ const getConnectedBankAccountService = async (userId: string) => {
 
 // STRIPE WEBHOOK - FOR EVENT JOINING
 const handleWebHookService = async (req: Request) => {
-  const sig = req.headers['stripe-signature'] as string;
+  try {
+    const sig = req.headers['stripe-signature'] as string;
   const event = stripe.webhooks.constructEvent(
     req.body,
     sig,
@@ -146,10 +147,14 @@ const handleWebHookService = async (req: Request) => {
     }
   }
   return [];
+  } catch (error: any) {
+    console.log("Webhook error: ", error.message)
+  }
 };
 
 // STRIPE WEBHOOK - FOR SPONSORE EVENT
 const handleSponsoredWebHookService = async (req: Request) => {
+  try {
   const sig = req.headers['stripe-signature'] as string;
   const event = stripe.webhooks.constructEvent(
     req.body,
@@ -188,6 +193,9 @@ const handleSponsoredWebHookService = async (req: Request) => {
     }
   }
   return [];
+  } catch (error: any) {
+    console.log("Webhook Error: ", error.message);
+  }
 };
 
 // ======================  PAYMENT TRANSACTION QUERY ====================
