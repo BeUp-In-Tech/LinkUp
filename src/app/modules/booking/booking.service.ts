@@ -79,7 +79,6 @@ const bookingIntentService = async (
     booking = await Booking.create({
       event: isEventExist._id,
       user: isUser._id,
-      price: isEventExist.price,
       booking_status: BookingStatus.PENDING,
     });
 
