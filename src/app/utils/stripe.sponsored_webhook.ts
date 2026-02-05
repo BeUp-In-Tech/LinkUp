@@ -125,7 +125,7 @@ export const sponsoredSuccessHandler = async (paymentIntent: any) => {
             // SEND EMAIL
             sendEmail({
               to: host?.email as string,
-              subject: `LinkUp - Your event "${capitalize(sponsored.sponsor_type)}" payment is successful`,
+              subject: `LinkUp - Your event ${capitalize(sponsored.sponsor_type)} payment is successful`,
               templateName:
                 sponsored.sponsor_type === ISponsored.SPONSORED
                   ? 'eventSponsoredUpdate'
@@ -133,11 +133,15 @@ export const sponsoredSuccessHandler = async (paymentIntent: any) => {
               templateData: {
                 event_title: event?.title,
                 event_venue: event?.venue,
+                eventId: event?._id,
                 event_date: dayjs(event?.event_start).format(
                   'MM/DD/YYYY, hh:mm:ss A'
                 ),
                 sponsor_name: 'LinkUp',
                 support_email: env?.ADMIN_GMAIL,
+                amount: payment.transaction_amount,
+                currency: payment.currency,
+                date: dayjs(new Date()).format("dddd, MMMM D, YYYY h:mm A")
               },
             });
           }
