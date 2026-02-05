@@ -25,7 +25,7 @@ import { sendMultiNotification } from '../../utils/notificationsendhelper/friend
 import { NotificationType } from '../notifications/notification.interface';
 import { QueryBuilder } from '../../utils/QueryBuilder';
 import { ICoord, IUser, Role } from '../users/user.interface';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import Booking from '../booking/booking.model';
 import { sendEmail } from '../../utils/sendMail';
 import env from '../../config/env';
@@ -82,7 +82,7 @@ const createEventService = async (payload: IEvent, _user: JwtPayload) => {
   };
 
   payload.location = location;
-  payload.host = _user.userId;
+  payload.host = new mongoose.Types.ObjectId(_user.userId);
 
   // => -------Create event & chat group in parallel--------
   const groupMemberPayload: IGroupMember = {
@@ -401,7 +401,7 @@ const updateEventService = async (
     // FILTER ONLY BOOKED MEMBERS
     const bookedMembersInfo = eventBooking.map((booking) => booking?.user);
     const bookedMembersId = bookedMembersInfo.map(
-      (member: Partial<IUser>) => member?._id
+      (member: Partial<IUser>) => member?._id as Types.ObjectId
     ); // _id
 
     // GET EMAIL PREFERENCES OF BOOKED MEMBERS
