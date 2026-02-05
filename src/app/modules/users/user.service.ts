@@ -5,7 +5,7 @@ import { randomOTPGenerator } from '../../utils/randomOTPGenerator';
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import { validatePhone } from '../../utils/phoneNumberValidatior';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { QueryBuilder } from '../../utils/QueryBuilder';
 import { NotificationPreference } from '../notifications/notification.model';
 import Booking from '../booking/booking.model';
@@ -18,8 +18,8 @@ import axios from 'axios';
 import EventVote from '../voting/voting.model';
 import { VotingType } from '../voting/voting.interface';
 import { redisClient } from '../../config/redis.config';
-import { sendEmail } from '../../utils/sendMail';
 import { deleteImageFromCLoudinary } from '../../config/cloudinary.config';
+import { twilio } from '../../config/twilio.config';
 
 // CREATE USER
 const createUserService = async (payload: Partial<IUser>) => {
@@ -38,7 +38,7 @@ const createUserService = async (payload: Partial<IUser>) => {
 
   const userPayload = {
     email,
-    auths: authUser,
+    auths: [authUser],
     ...rest,
   };
 
@@ -50,7 +50,7 @@ const createUserService = async (payload: Partial<IUser>) => {
 
   // Notification preference setup can be added here in future
   await NotificationPreference.create({
-    user: creatUser?._id,
+    user: new mongoose.Types.ObjectId(creatUser?._id),
     channel: {
       push: true,
       email: true,
@@ -398,7 +398,7 @@ const userDeleteService = async (userId: string, decodedToken: JwtPayload) => {
   return null;
 };
 
-// VERIFY USER
+// SEND VERIFICATION OTP
 const verifyUserService = async (userId: string) => {
   const findUser = await User.findOne({ _id: userId });
   if (!findUser) {
@@ -412,20 +412,15 @@ const verifyUserService = async (userId: string) => {
     EX: 300,
   });
 
-  sendEmail({
-    to: findUser.email,
-    subject: `Phone number verification`,
-    templateName: 'test',
-    templateData: {
-      otp: otp,
-      name: findUser.fullName,
-    },
-  });
+   await twilio.messages.create({
+      to: findUser.phone as string,
+      body: `Your verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`
+  })
 
   return null;
 };
 
-// VERIFY OTP
+// VERIFY OTP AND VERIFY USER
 const verifyOTPService = async (phoneNumber: string, otp: string) => {
   const findUser = await User.findOne({ phone: phoneNumber });
   if (!findUser) {
