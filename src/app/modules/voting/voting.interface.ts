@@ -1,4 +1,5 @@
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
+
 
 export enum VotingType {
   UPVOTE = 'UPVOTE',
@@ -6,7 +7,7 @@ export enum VotingType {
 }
 
 export interface IEventVote {
-  event: Schema.Types.ObjectId;
-  user: Schema.Types.ObjectId;
+  event: Types.ObjectId;
+  user: Types.ObjectId;
   voteType: VotingType;
 }
