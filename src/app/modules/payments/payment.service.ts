@@ -106,95 +106,115 @@ const getConnectedBankAccountService = async (userId: string) => {
   return bankAccountData;
 };
 
+// GENERATE STRIPE VENDOR LOGIN LINK
+const getStripeVendorLoginLinkService = async (userId: string) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new AppError(404, 'User not found!');
+  }
+
+  if (!user.stripeAccountId) {
+    throw new AppError(400, "No payout account connected found!")
+  }
+
+  // generate link
+  const loginLink = await stripe.accounts.createLoginLink(
+    user.stripeAccountId as string
+  );
+
+  return loginLink.url;
+};
+
 // STRIPE WEBHOOK - FOR EVENT JOINING
 const handleWebHookService = async (req: Request) => {
   try {
     const sig = req.headers['stripe-signature'] as string;
-  const event = stripe.webhooks.constructEvent(
-    req.body,
-    sig,
-    env.STRIPE_WEBHOOK_SECRET
-  );
+    const event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      env.STRIPE_WEBHOOK_SECRET
+    );
 
-  // Handle the event
-  switch (event.type) {
-    case 'payment_intent.succeeded': {
-      const paymentIntent = event.data.object;
-      await payemntSuccessHandler(paymentIntent);
-      break;
-    }
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.succeeded': {
+        const paymentIntent = event.data.object;
+        await payemntSuccessHandler(paymentIntent);
+        break;
+      }
 
-    case 'payment_intent.payment_failed': {
-      const paymentFailed = event.data.object;
-      await paymetFailedHandler(paymentFailed);
-      break;
-    }
+      case 'payment_intent.payment_failed': {
+        const paymentFailed = event.data.object;
+        await paymetFailedHandler(paymentFailed);
+        break;
+      }
 
-    case 'payment_intent.canceled': {
-      const paymentIntent = event.data.object;
-      await paymentCanceledHandler(paymentIntent);
-      break;
-    }
+      case 'payment_intent.canceled': {
+        const paymentIntent = event.data.object;
+        await paymentCanceledHandler(paymentIntent);
+        break;
+      }
 
-    case 'charge.succeeded': {
-      const charge = event.data.object;
-      await chargeSucceededHandler(charge);
-      break;
-    }
+      case 'charge.succeeded': {
+        const charge = event.data.object;
+        await chargeSucceededHandler(charge);
+        break;
+      }
 
-    default: {
-      console.log(`Unhandled event type: ${event.type}`);
+      default: {
+        console.log(`Unhandled event type: ${event.type}`);
+      }
     }
-  }
-  return [];
+    return [];
   } catch (error: any) {
-    console.log("Webhook error: ", error.message)
+    console.log('Webhook error: ', error.message);
   }
 };
 
 // STRIPE WEBHOOK - FOR SPONSORE EVENT
 const handleSponsoredWebHookService = async (req: Request) => {
   try {
-  const sig = req.headers['stripe-signature'] as string;
-  const event = stripe.webhooks.constructEvent(
-    req.body,
-    sig,
-    env.STRIPE_SPONSORED_WEBHOOK_SECRET
-  );
+    const sig = req.headers['stripe-signature'] as string;
+    const event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      env.STRIPE_SPONSORED_WEBHOOK_SECRET
+    );
 
-  // Handle the event
-  switch (event.type) {
-    case 'payment_intent.succeeded': {
-      const paymentIntent = event.data.object;
-      await sponsoredSuccessHandler(paymentIntent);
-      break;
-    }
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.succeeded': {
+        const paymentIntent = event.data.object;
+        await sponsoredSuccessHandler(paymentIntent);
+        break;
+      }
 
-    case 'payment_intent.payment_failed': {
-      const paymentFailed = event.data.object;
-      await sponsoredFailedHandler(paymentFailed);
-      break;
-    }
+      case 'payment_intent.payment_failed': {
+        const paymentFailed = event.data.object;
+        await sponsoredFailedHandler(paymentFailed);
+        break;
+      }
 
-    case 'payment_intent.canceled': {
-      const paymentIntent = event.data.object;
-      await sponsoredCancelledHandler(paymentIntent);
-      break;
-    }
+      case 'payment_intent.canceled': {
+        const paymentIntent = event.data.object;
+        await sponsoredCancelledHandler(paymentIntent);
+        break;
+      }
 
-    case 'charge.succeeded': {
-      const charge = event.data.object;
-      await chargeSucceededHandler(charge);
-      break;
-    }
+      case 'charge.succeeded': {
+        const charge = event.data.object;
+        await chargeSucceededHandler(charge);
+        break;
+      }
 
-    default: {
-      console.log(`Unhandled event type: ${event.type}`);
+      default: {
+        console.log(`Unhandled event type: ${event.type}`);
+      }
     }
-  }
-  return [];
+    return [];
   } catch (error: any) {
-    console.log("Webhook Error: ", error.message);
+    console.log('Webhook Error: ', error.message);
   }
 };
 
@@ -204,7 +224,13 @@ const getTransactionHistory = async (
   userId: string,
   query: Record<string, string>
 ) => {
-  const queryBuilder = new QueryBuilder(Payment.find({ user: userId, payment_status: PaymentStatus.PAID }, { transfer_data: 0, payment_method_id: 0}), query);
+  const queryBuilder = new QueryBuilder(
+    Payment.find(
+      { user: userId, payment_status: PaymentStatus.PAID },
+      { transfer_data: 0, payment_method_id: 0 }
+    ),
+    query
+  );
 
   const transactions = await queryBuilder
     .filter()
@@ -242,4 +268,5 @@ export const paymentServices = {
   getTransactionHistory,
   getAllTransactionHistory,
   handleSponsoredWebHookService,
+  getStripeVendorLoginLinkService
 };
