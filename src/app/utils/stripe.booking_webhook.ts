@@ -20,6 +20,8 @@ import { io } from '../socket';
 export const payemntSuccessHandler = async (object: any) => {
   // Meta Data From Payment to update DB
   const metadata = object.metadata;
+  console.log("I reached payment success handler");
+  
 
   if (metadata.booking && metadata.payment && metadata.transaction_id) {
     const paymentPayload: Partial<IPayment> = {
@@ -276,10 +278,10 @@ export const paymentCanceledHandler = async (paymentIntent: any) => {
 export const chargeSucceededHandler = async (object: any) => {
   try {
     const metadata = object.metadata;
+    
     if (
-      metadata.event &&
-      metadata.package &&
-      metadata.sponsored &&
+      metadata.transaction_id &&
+      metadata.booking &&
       metadata.payment
     ) {
       await Payment.findByIdAndUpdate(object.metadata.payment, {
