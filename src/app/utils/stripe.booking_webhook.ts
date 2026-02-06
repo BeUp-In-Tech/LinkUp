@@ -20,7 +20,6 @@ import { io } from '../socket';
 export const payemntSuccessHandler = async (object: any) => {
   // Meta Data From Payment to update DB
   const metadata = object.metadata;
-  console.log("I reached payment success handler");
   
 
   if (metadata.booking && metadata.payment && metadata.transaction_id) {
@@ -70,7 +69,7 @@ export const payemntSuccessHandler = async (object: any) => {
 
     // ADD USER TO EVENT CHAT GROUP
     const joinUserToEventChatGroup = await Group.findOne({
-      event: metadata.event,
+      event: bookingConfirm?.event,
     });
 
     if (joinUserToEventChatGroup) {
@@ -88,6 +87,7 @@ export const payemntSuccessHandler = async (object: any) => {
         { event: bookingConfirm?.event },
         { $push: { group_members: memberPayload } }
       );
+      
 
       io.to(memberPayload.user.toString() as string).emit('notification', {
         user: memberPayload.user,
