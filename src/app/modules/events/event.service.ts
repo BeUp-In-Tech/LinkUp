@@ -159,7 +159,10 @@ const getEventsService = async (
   const blockedUsersIds = getBlockList.map((block) => block.blockedUser);
 
   // FILTER BLOCKED USERS EVENTS
-  const filter = { host: { $nin: blockedUsersIds } };
+  const filter = {
+    host: { $nin: blockedUsersIds },
+    event_end: { $gte: new Date() },
+  };
 
   // Query Builder
   const qeuryBuilder = new QueryBuilder(Event.find(filter), query);
@@ -182,6 +185,8 @@ const getEventsService = async (
     metaData,
   };
 };
+
+
 
 // GET USER INTERESTED EVENTS
 const getInterestEventsService = async (
@@ -646,7 +651,7 @@ const getMyEventsService = async (
   };
 };
 
-// GET EVENT ANALYTICS SERVICE
+// GET SINGLE EVENT ANALYTICS SERVICE
 const geteventAnalyticsService = async (userId: string, eventId: string) => {
   const eventPromise = Event.findOne({
     _id: eventId,
@@ -668,11 +673,25 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
       },
     },
 
-    // Stage 2: Total Revenue Calculation
+    // Stage 2: Projection
+    {
+      $lookup: {
+        from: "payments",
+        localField: "payment",
+        foreignField: "_id",
+        as: "payment"
+      }
+    },
+
+    // Stage 3: Unwind
+    {
+      $unwind: "$payment"
+    },
+    // Stage 4: Total Revenue Calculation
     {
       $group: {
         _id: null,
-        totalRevenue: { $sum: '$price' },
+        totalRevenue: { $sum: '$payment.withdrawable_amount' },
         totalBookings: { $sum: 1 },
       },
     },
@@ -680,12 +699,12 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
     {
       $project: {
         _id: 0,
-      },
+      }
     },
   ]);
 
   //  RESOLVE ALL PROMISES IN PARALLEL
-  const [event, bookingDetails] = await Promise.all([
+  const [event, getBookingDetails] = await Promise.all([
     eventPromise,
     getBookingDetailsPromise,
   ]);
@@ -697,8 +716,8 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
     );
   }
 
-  const totalRevenue = bookingDetails[0]?.totalRevenue || 0;
-  const totalBookings = bookingDetails[0]?.totalBookings || 0;
+  const totalRevenue = getBookingDetails[0]?.totalRevenue || 0;
+  const totalBookings = getBookingDetails[0]?.totalBookings || 0;
 
   return {
     totalRevenue,
@@ -1086,4 +1105,5 @@ export const eventServices = {
   getJoinRequestService,
   myCoHostInvitation,
   checkPrivateEventApprovalService,
+  getTrendingEventsService,
 };
