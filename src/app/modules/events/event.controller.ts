@@ -46,7 +46,7 @@ const getEvents = CatchAsync(
   }
 );
 
-// GET EVENT CONTROLLER
+// GET PREVIOUS EVENTS CONTROLLER
 const getPreviousEvents = CatchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as JwtPayload;
