@@ -414,6 +414,7 @@ const verifyUserService = async (userId: string) => {
 
    await twilio.messages.create({
       to: findUser.phone as string,
+      from: env.TWILIO_PHONE_NUMBER,
       body: `Your verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`
   })
 
@@ -421,8 +422,8 @@ const verifyUserService = async (userId: string) => {
 };
 
 // VERIFY OTP AND VERIFY USER
-const verifyOTPService = async (phoneNumber: string, otp: string) => {
-  const findUser = await User.findOne({ phone: phoneNumber });
+const verifyOTPService = async (userId: string, otp: string) => {
+  const findUser = await User.findOne({ _id: userId });
   if (!findUser) {
     throw new AppError(
       StatusCodes.NOT_FOUND,
@@ -434,7 +435,7 @@ const verifyOTPService = async (phoneNumber: string, otp: string) => {
     throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid OTP!');
   }
 
-  const getOTP = await redisClient.get(`${phoneNumber}`);
+  const getOTP = await redisClient.get(`${findUser.phone}`);
   if (!getOTP) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'OTP has expired or invalid!');
   }
