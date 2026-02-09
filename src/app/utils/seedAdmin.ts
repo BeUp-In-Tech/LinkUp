@@ -18,7 +18,7 @@ export const adminCreate = async () => {
     };
 
     const payload: IUser = {
-      fullName: 'Nayem',
+      fullName: 'Aj Vandu',
       email: env?.ADMIN_GMAIL,
       password: env?.ADMIN_PASSWORD,
       role: Role.ADMIN,
