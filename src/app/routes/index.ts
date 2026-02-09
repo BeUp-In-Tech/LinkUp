@@ -14,6 +14,7 @@ import { bookingRouter } from '../modules/booking/booking.route';
 import { sponsoredRouter } from '../modules/sponsored/sponsored.route';
 import { dashboardRouter } from '../modules/dashboard/dashboard.route';
 import { votingRouter } from '../modules/voting/voting.route';
+import { trendingRouter } from '../modules/trending/trending.route';
 
 export const router = Router();
 
@@ -77,6 +78,10 @@ const moduleRoutes = [
   {
     path: '/voting',
     route: votingRouter,
+  },
+  {
+    path: '/trending',
+    route: trendingRouter,
   },
 ];
 
