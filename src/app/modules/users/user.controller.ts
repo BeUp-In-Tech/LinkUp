@@ -29,7 +29,7 @@ const getMe = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// GET ME
+// GET ALL USERS
 const getAllUser = CatchAsync(async (req: Request, res: Response) => {
   const query = req.query as Record<string, string>;
   const { userId } = req.user as JwtPayload;
@@ -43,7 +43,7 @@ const getAllUser = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Get Profile
+// GET PROFILE
 const getProfile = CatchAsync(async (req: Request, res: Response) => {
   const { userId } = req.params;
   const result = await userServices.getProfileService(userId as string);
