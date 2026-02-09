@@ -15,6 +15,7 @@ import Group from '../modules/groups/group.model';
 import { GroupMemberRole } from '../modules/groups/group.interface';
 import { Types } from 'mongoose';
 import { io } from '../socket';
+import { trackEventBooking } from './eventBookingCount';
 
 // PYAMENT SUCCESS HANDLE
 export const payemntSuccessHandler = async (object: any) => {
@@ -40,6 +41,7 @@ export const payemntSuccessHandler = async (object: any) => {
     };
 
     // UPDATE DATABASE
+    // UPDATE PAYMENT DATA
     const paymentPromise = Payment.findByIdAndUpdate(
       metadata.payment,
       {
@@ -55,6 +57,7 @@ export const payemntSuccessHandler = async (object: any) => {
       { new: true, runValidators: true }
     );
 
+    // UPDATE BOOKING DATA
     const bookingConfirmPromise = Booking.findByIdAndUpdate(
       metadata.booking,
       { booking_status: BookingStatus.CONFIRMED },
@@ -66,6 +69,7 @@ export const payemntSuccessHandler = async (object: any) => {
       paymentPromise,
       bookingConfirmPromise,
     ]);
+
 
     // ADD USER TO EVENT CHAT GROUP
     const joinUserToEventChatGroup = await Group.findOne({
@@ -100,6 +104,15 @@ export const payemntSuccessHandler = async (object: any) => {
         },
       });
     }
+
+    // ADD TRENDING BOOKING COUNT
+    setImmediate(async () => {
+      try {
+        await trackEventBooking(bookingConfirm?.event.toString() as string);
+      } catch (error) {
+        console.log("Trending event booking count error: ", error)
+      }
+    })
 
     // NOTIFY USER HE IS JOINED THE EVENT
     if (
