@@ -31,6 +31,7 @@ router.get(
   checkAuth(...Object.keys(Role)),
   eventControllers.getEventDetails
 );
+
 // UPDATE EVENT
 router.patch(
   '/:eventId',
@@ -39,12 +40,22 @@ router.patch(
   validateRequest(eventUpdateSchema),
   eventControllers.updateEvent
 );
+
 // GET MY EVENT
 router.get(
   '/my_events',
   checkAuth(...Object.keys(Role)),
   eventControllers.getMyEvents
 );
+
+// GET TRENDING EVENT
+router.get(
+  '/trending',
+  checkAuth(...Object.keys(Role)),
+  eventControllers.getTrendingEvents
+);
+
+// GET EVENT ANYLYTICS
 router.get(
   '/event_analytics/:eventId',
   checkAuth(...Object.keys(Role)),
