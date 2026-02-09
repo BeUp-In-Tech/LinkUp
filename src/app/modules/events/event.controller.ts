@@ -46,6 +46,23 @@ const getEvents = CatchAsync(
   }
 );
 
+// GET EVENT CONTROLLER
+const getPreviousEvents = CatchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as JwtPayload;
+    const query = req.query as Record<string, string>;
+
+    const result = await eventServices.getPreviousEventService(query);
+
+    SendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Previous events fetched successfully!',
+      data: result,
+    });
+  }
+);
+
 // GET INTERESTED EVENTS CONTROLLER
 const getInterestEvents = CatchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -306,4 +323,5 @@ export const eventControllers = {
   getJoinRequest,
   myCoHostInvitation,
   checkPrivateEventApproval,
+  getPreviousEvents
 };

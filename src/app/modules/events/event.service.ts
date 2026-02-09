@@ -188,6 +188,27 @@ const getEventsService = async (
   };
 };
 
+// GET PREVIOUS COMPLETED EVENT
+const getPreviousEventService = async (query: Record<string, string>) => {
+  const queryBuilder = new QueryBuilder(Event.find({ event_end: {$lte: new Date()}, event_status: EventStatus.COMPLETED }), query);
+  const previousEvents = await queryBuilder
+    .filter()
+    .category()
+    .dateFilter()
+    .sort()
+    .select()
+    .paginate()
+    .join()
+    .build();
+
+    // Meta data
+  const metaData = await queryBuilder.getMeta();
+  return {
+    metaData,
+    previousEvents,
+  };
+}
+
 // GET USER INTERESTED EVENTS
 const getInterestEventsService = async (
   _user: JwtPayload,
@@ -1111,4 +1132,5 @@ export const eventServices = {
   getJoinRequestService,
   myCoHostInvitation,
   checkPrivateEventApprovalService,
+  getPreviousEventService
 };
