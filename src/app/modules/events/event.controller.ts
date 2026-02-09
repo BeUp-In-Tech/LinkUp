@@ -46,22 +46,6 @@ const getEvents = CatchAsync(
   }
 );
 
-// GET TRENDING EVENTS
-const getTrendingEvents = CatchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const query = req.query as Record<string, string>;
-
-    const result = await eventServices.getTrendingEventsService(query);
-
-    SendResponse(res, {
-      success: true,
-      statusCode: StatusCodes.OK,
-      message: 'Trending event fetched successfully!',
-      data: result,
-    });
-  }
-);
-
 // GET INTERESTED EVENTS CONTROLLER
 const getInterestEvents = CatchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -322,5 +306,4 @@ export const eventControllers = {
   getJoinRequest,
   myCoHostInvitation,
   checkPrivateEventApproval,
-  getTrendingEvents
 };

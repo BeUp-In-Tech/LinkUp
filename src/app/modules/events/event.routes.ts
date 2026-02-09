@@ -48,13 +48,6 @@ router.get(
   eventControllers.getMyEvents
 );
 
-// GET TRENDING EVENT
-router.get(
-  '/trending',
-  checkAuth(...Object.keys(Role)),
-  eventControllers.getTrendingEvents
-);
-
 // GET EVENT ANYLYTICS
 router.get(
   '/event_analytics/:eventId',
