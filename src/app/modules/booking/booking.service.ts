@@ -10,6 +10,7 @@ import { generateTransactionId } from '../../utils/generateTransactionId';
 import { PaymentStatus } from '../payments/payment.interface';
 import {
   EventJoinRequestType,
+  EventStatus,
   EventVisibility,
 } from '../events/event.interface';
 import Stripe from 'stripe';
@@ -27,6 +28,10 @@ const bookingIntentService = async (
   const isEventExist = await Event.findOne({ _id: payload.event });
   if (!isEventExist)
     throw new AppError(StatusCodes.NOT_FOUND, 'Event not found!');
+
+  if (isEventExist.event_status === EventStatus.COMPLETED) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "This event has been finished, you can't join.")
+  }
 
   const isUser = await User.findOne({ _id: userId });
   if (!isUser) throw new AppError(StatusCodes.NOT_FOUND, 'User not found!');
