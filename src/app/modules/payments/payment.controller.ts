@@ -54,6 +54,21 @@ const getConnectedBankAccount = CatchAsync(
   }
 );
 
+// GENERATE STRIPE VENDOR LOGIN LINK
+const getStripeVendorLoginLink = CatchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.user as JwtPayload;
+    const result = await paymentServices.getStripeVendorLoginLinkService(userId);
+
+    SendResponse(res, {
+      success: true,
+      statusCode: 200,
+      message: 'Login link generated',
+      data: result,
+    });
+  }
+);
+
 // HANDLE STRIPE WEBHOOK TO LISTEN EVENT
 const handleWebHook = CatchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -122,4 +137,5 @@ export const paymentControllers = {
   transactionHistory,
   allTransactionHistory,
   handleSponsoredWebHook,
+  getStripeVendorLoginLink
 };

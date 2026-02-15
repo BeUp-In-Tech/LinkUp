@@ -1,231 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Event Has Been Sponsored</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Sponsorship Confirmation - LinkUp</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-        }
-        .header {
-            background-color: #667eea;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        .header h1 {
-            color: #ffffff;
-            margin: 0;
-            font-size: 26px;
-            font-weight: 600;
-        }
-        .content {
-            padding: 40px 30px;
-        }
-        .success-badge {
-            display: inline-block;
-            background-color: #10b981;
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .content h2 {
-            color: #1f2937;
-            font-size: 22px;
-            margin: 0 0 10px 0;
-            font-weight: 600;
-        }
-        .content p {
-            color: #4b5563;
-            line-height: 1.6;
-            margin: 0 0 15px 0;
-            font-size: 15px;
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        background-color: #ffffff;
+        -webkit-font-smoothing: antialiased;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+      }
+      .header {
+        padding: 40px 40px 32px 40px;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .logo {
+        color: #000000;
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: -0.3px;
+      }
+      .content {
+        padding: 40px;
+      }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #000000;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 32px;
+      }
+      .status-icon {
+        font-size: 16px;
+      }
+      h1 {
+        color: #000000;
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 24px 0;
+        line-height: 1.3;
+      }
+      p {
+        color: #525252;
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0 0 16px 0;
+      }
+      .event-details {
+        margin: 40px 0;
+        padding: 32px;
+        background-color: #fafafa;
+        border-radius: 8px;
+      }
+      .detail-row {
+        display: flex;
+        padding: 16px 0;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .detail-row:first-child {
+        padding-top: 0;
+      }
+      .detail-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .detail-label {
+        font-size: 14px;
+        color: #737373;
+        min-width: 140px;
+        font-weight: 500;
+      }
+      .detail-value {
+        font-size: 16px;
+        color: #000000;
+        font-weight: 500;
+        flex: 1;
+      }
+      .cta-button {
+        display: inline-block;
+        background-color: #000000;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 15px;
+        margin: 32px 0;
+      }
+      .signature {
+        margin-top: 40px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e5e5;
+      }
+      .signature p {
+        margin: 0;
+        color: #000000;
+        font-size: 15px;
+      }
+      .signature-team {
+        font-weight: 600;
+      }
+      .footer {
+        padding: 32px 40px;
+        background-color: #fafafa;
+        border-top: 1px solid #e5e5e5;
+      }
+      .footer p {
+        color: #737373;
+        font-size: 14px;
+        margin: 0 0 8px 0;
+        text-align: center;
+      }
+      .footer a {
+        color: #000000;
+        text-decoration: none;
+      }
+      .footer-links {
+        text-align: center;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e5e5;
+      }
+      .footer-links a {
+        color: #737373;
+        font-size: 13px;
+        margin: 0 8px;
+      }
+      @media only screen and (max-width: 600px) {
+        .header,
+        .content,
+        .footer {
+          padding-left: 24px;
+          padding-right: 24px;
         }
         .event-details {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 25px;
-            margin: 25px 0;
-        }
-        .event-details h3 {
-            margin: 0 0 20px 0;
-            font-size: 18px;
-            color: #1f2937;
-            font-weight: 600;
+          padding: 24px;
         }
         .detail-row {
-            display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .detail-row:last-child {
-            border-bottom: none;
+          flex-direction: column;
+          gap: 4px;
         }
         .detail-label {
-            font-weight: 600;
-            color: #374151;
-            min-width: 100px;
-            font-size: 14px;
+          min-width: auto;
         }
-        .detail-value {
-            color: #1f2937;
-            font-size: 14px;
-            flex: 1;
-        }
-        .sponsor-section {
-            background-color: #fffbeb;
-            border: 1px solid #fbbf24;
-            border-radius: 8px;
-            padding: 20px 25px;
-            margin: 25px 0;
-        }
-        .sponsor-section h3 {
-            margin: 0 0 15px 0;
-            font-size: 18px;
-            color: #92400e;
-            font-weight: 600;
-        }
-        .sponsor-section p {
-            margin: 0 0 10px 0;
-            color: #78350f;
-            font-size: 15px;
-        }
-        .sponsor-name {
-            font-weight: 700;
-            font-size: 16px;
-            color: #92400e;
-        }
-        .benefit-item {
-            padding: 10px 0;
-            color: #4b5563;
-            font-size: 14px;
-            line-height: 1.5;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        .benefit-item:last-child {
-            border-bottom: none;
-        }
-        .benefit-item strong {
-            color: #1f2937;
-        }
-        .cta-button {
-            display: inline-block;
-            background-color: #667eea;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 32px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 15px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .info-text {
-            background-color: #f0f9ff;
-            border-left: 4px solid #3b82f6;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        .info-text p {
-            margin: 0;
-            color: #1e40af;
-            font-size: 14px;
-        }
-        .footer {
-            background-color: #f9fafb;
-            padding: 30px;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
-        }
-        .footer p {
-            color: #6b7280;
-            font-size: 14px;
-            margin: 5px 0;
-        }
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-        @media only screen and (max-width: 600px) {
-            .content {
-                padding: 30px 20px;
-            }
-            .detail-row {
-                flex-direction: column;
-            }
-            .detail-label {
-                margin-bottom: 5px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="email-container">
-        <div class="header">
-            <h1>Event Sponsorship Confirmation</h1>
+      <!-- Header -->
+      <div class="header">
+        <h2 class="logo">LinkUp</h2>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="status">
+          <span class="status-icon">✓</span>
+          <span>Sponsored</span>
         </div>
-        
-        <div class="content">
-            <div style="text-align: center;">
-                <span class="success-badge">✓ Sponsored</span>
-            </div>
-            
-            <h2>Your Event Has Been Sponsored</h2>
-            
-            <p>Dear Host,</p>
-            
-            <p>We're pleased to inform you that your event on LinkUp has been successfully sponsored. This sponsorship will provide your event with enhanced visibility and promotional support on our platform.</p>
-            
-            <div class="event-details">
-                <h3>Event Information</h3>
-                <div class="detail-row">
-                    <div class="detail-label">Event Title: </div>
-                    <div class="detail-value"> <%= event_title %></div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Venue:</div>
-                    <div class="detail-value"> <%= event_venue %></div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Event Start Date: </div>
-                    <div class="detail-value"> <%= event_date %></div>
-                </div>
-            </div>
-            
-            <div class="sponsor-section">
-                <h3>Sponsorship Details</h3>
-                <p>Your event is now sponsored by:</p>
-                <p class="sponsor-name">LinkUp Team</p>
-            </div>
-            
-            <div class="info-text">
-                <p>We recommend reviewing your event details to ensure all information is current and complete to maximize engagement with potential attendees.</p>
-            </div>
-            
-            
-            <p style="margin-top: 30px;">If you have any questions regarding your sponsorship or need assistance with your event, please don't hesitate to reach out to our support team.</p>
-            
-            <p style="margin-top: 20px;">Best regards,<br><strong>The LinkUp Team</strong></p>
+
+        <h1>Your event has been successfully sponsored</h1>
+
+        <p>Dear Event Host,</p>
+
+        <p>
+          Your event <strong><%= event_title %></strong> is now sponsored on
+          LinkUp. This sponsorship provides enhanced visibility and promotional
+          support to help you reach more attendees.
+        </p>
+
+        <!-- Event Details -->
+        <div class="event-details">
+          <div class="detail-row">
+            <div class="detail-label">Event</div>
+            <div class="detail-value"><%= event_title %></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Venue</div>
+            <div class="detail-value"><%= event_venue %></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Date</div>
+            <div class="detail-value"><%= event_date %></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Amount</div>
+            <div class="detail-value">$<%= amount %> <%= currency %></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Payment Date</div>
+            <div class="detail-value"><%= date %></div>
+          </div>
         </div>
-        
-        <div class="footer">
-            <p><strong>Need Assistance?</strong></p>
-            <p>Contact us at <a href="mailto:<%= support_email %>"><%= support_email %></a></p>
-            <p style="margin-top: 20px; font-size: 12px;">© 2024 LinkUp. All rights reserved.</p>
+
+        <p>
+          We recommend reviewing your event details to ensure all information is
+          current and complete to maximize engagement.
+        </p>
+
+        <!-- <a href="myshoppingapp://product/<%= eventId %>" class="cta-button">
+          View Event
+        </a> -->
+
+        <!-- Signature -->
+        <div class="signature">
+          <p>Best regards,</p>
+          <p class="signature-team">The LinkUp Team</p>
         </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>
+          Need help? Contact us at
+          <a href="mailto:<%= support_email %>"><%= support_email %></a>
+        </p>
+        <div class="footer-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Unsubscribe</a>
+        </div>
+        <p style="margin-top: 16px; font-size: 13px">
+          © 2024 LinkUp. All rights reserved.
+        </p>
+      </div>
     </div>
-</body>
+  </body>
 </html>

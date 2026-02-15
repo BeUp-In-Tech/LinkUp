@@ -25,7 +25,7 @@ import { sendMultiNotification } from '../../utils/notificationsendhelper/friend
 import { NotificationType } from '../notifications/notification.interface';
 import { QueryBuilder } from '../../utils/QueryBuilder';
 import { ICoord, IUser, Role } from '../users/user.interface';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import Booking from '../booking/booking.model';
 import { sendEmail } from '../../utils/sendMail';
 import env from '../../config/env';
@@ -40,6 +40,8 @@ import { sendPersonalNotification } from '../../utils/notificationsendhelper/use
 import { onlineUsers } from '../../socket';
 import { sendPushAndSave } from '../../utils/notificationsendhelper/push.notification.utils';
 import BlockedUser from '../BlockedUser/blocked.model';
+import { trackEventView } from '../../utils/eventViewCount';
+
 
 // CREATE EVENT SERVICE
 const createEventService = async (payload: IEvent, _user: JwtPayload) => {
@@ -82,7 +84,7 @@ const createEventService = async (payload: IEvent, _user: JwtPayload) => {
   };
 
   payload.location = location;
-  payload.host = _user.userId;
+  payload.host = new mongoose.Types.ObjectId(_user.userId);
 
   // => -------Create event & chat group in parallel--------
   const groupMemberPayload: IGroupMember = {
@@ -159,7 +161,10 @@ const getEventsService = async (
   const blockedUsersIds = getBlockList.map((block) => block.blockedUser);
 
   // FILTER BLOCKED USERS EVENTS
-  const filter = { host: { $nin: blockedUsersIds } };
+  const filter = {
+    host: { $nin: blockedUsersIds },
+    event_end: { $gte: new Date() },
+  };
 
   // Query Builder
   const qeuryBuilder = new QueryBuilder(Event.find(filter), query);
@@ -182,6 +187,27 @@ const getEventsService = async (
     metaData,
   };
 };
+
+// GET PREVIOUS COMPLETED EVENT
+const getPreviousEventService = async (query: Record<string, string>) => {
+  const queryBuilder = new QueryBuilder(Event.find({ event_end: {$lte: new Date()}, event_status: EventStatus.COMPLETED }), query);
+  const previousEvents = await queryBuilder
+    .filter()
+    .category()
+    .dateFilter()
+    .sort()
+    .select()
+    .paginate()
+    .join()
+    .build();
+
+    // Meta data
+  const metaData = await queryBuilder.getMeta();
+  return {
+    metaData,
+    previousEvents,
+  };
+}
 
 // GET USER INTERESTED EVENTS
 const getInterestEventsService = async (
@@ -247,6 +273,12 @@ const getEventDetailsService = async (_user: JwtPayload, eventId: string) => {
   if (!event) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'No event found!');
   }
+
+
+  // TRACK EVENT VIEW
+  setImmediate(async () => {
+    await  trackEventView(eventId);
+  })
 
   return { totalJoined, totalJoinedMembers, ...event.toObject() };
 };
@@ -401,7 +433,7 @@ const updateEventService = async (
     // FILTER ONLY BOOKED MEMBERS
     const bookedMembersInfo = eventBooking.map((booking) => booking?.user);
     const bookedMembersId = bookedMembersInfo.map(
-      (member: Partial<IUser>) => member?._id
+      (member: Partial<IUser>) => member?._id as Types.ObjectId
     ); // _id
 
     // GET EMAIL PREFERENCES OF BOOKED MEMBERS
@@ -646,7 +678,7 @@ const getMyEventsService = async (
   };
 };
 
-// GET EVENT ANALYTICS SERVICE
+// GET SINGLE EVENT ANALYTICS SERVICE
 const geteventAnalyticsService = async (userId: string, eventId: string) => {
   const eventPromise = Event.findOne({
     _id: eventId,
@@ -668,11 +700,25 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
       },
     },
 
-    // Stage 2: Total Revenue Calculation
+    // Stage 2: Projection
+    {
+      $lookup: {
+        from: "payments",
+        localField: "payment",
+        foreignField: "_id",
+        as: "payment"
+      }
+    },
+
+    // Stage 3: Unwind
+    {
+      $unwind: "$payment"
+    },
+    // Stage 4: Total Revenue Calculation
     {
       $group: {
         _id: null,
-        totalRevenue: { $sum: '$price' },
+        totalRevenue: { $sum: '$payment.withdrawable_amount' },
         totalBookings: { $sum: 1 },
       },
     },
@@ -680,12 +726,12 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
     {
       $project: {
         _id: 0,
-      },
+      }
     },
   ]);
 
   //  RESOLVE ALL PROMISES IN PARALLEL
-  const [event, bookingDetails] = await Promise.all([
+  const [event, getBookingDetails] = await Promise.all([
     eventPromise,
     getBookingDetailsPromise,
   ]);
@@ -697,8 +743,8 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
     );
   }
 
-  const totalRevenue = bookingDetails[0]?.totalRevenue || 0;
-  const totalBookings = bookingDetails[0]?.totalBookings || 0;
+  const totalRevenue = getBookingDetails[0]?.totalRevenue || 0;
+  const totalBookings = getBookingDetails[0]?.totalBookings || 0;
 
   return {
     totalRevenue,
@@ -1086,4 +1132,5 @@ export const eventServices = {
   getJoinRequestService,
   myCoHostInvitation,
   checkPrivateEventApprovalService,
+  getPreviousEventService
 };

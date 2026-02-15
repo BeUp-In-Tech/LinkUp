@@ -122,7 +122,7 @@ const googleCallback = CatchAsync(
 
     const { refreshToken, accessToken } = await createUserTokens(user);
     res.redirect(
-      `${env.FRONTEND_URL}?refresh=${refreshToken}&access=${accessToken}`
+      `linkupapp://auth/google?refresh=${refreshToken}&access=${accessToken}`
     );
   }
 );

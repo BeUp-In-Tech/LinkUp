@@ -29,7 +29,7 @@ const getMe = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// GET ME
+// GET ALL USERS
 const getAllUser = CatchAsync(async (req: Request, res: Response) => {
   const query = req.query as Record<string, string>;
   const { userId } = req.user as JwtPayload;
@@ -43,7 +43,7 @@ const getAllUser = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Get Profile
+// GET PROFILE
 const getProfile = CatchAsync(async (req: Request, res: Response) => {
   const { userId } = req.params;
   const result = await userServices.getProfileService(userId as string);
@@ -111,8 +111,9 @@ const userVefification = CatchAsync(async (req: Request, res: Response) => {
 
 // RESEND OTP
 const verifyOTP = CatchAsync(async (req: Request, res: Response) => {
-  const { phoneNumber, otp } = req.body;
-  await userServices.verifyOTPService(phoneNumber, otp);
+  const { otp } = req.body;
+   const user = req.user as JwtPayload;
+  await userServices.verifyOTPService(user.userId as string, otp as string);
 
   SendResponse(res, {
     success: true,

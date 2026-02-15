@@ -30,8 +30,6 @@ interface EnvInterfaces {
 
   REDIS_HOST: string;
   REDIS_PORT: string;
-  REDIS_USERNAME: string;
-  REDIS_PASSWORD: string;
 
   REQUEST_RATE_LIMIT: number;
   REQUEST_RATE_LIMIT_TIME: number;
@@ -103,8 +101,6 @@ const loadEnvVarbles = (): EnvInterfaces => {
 
     'REDIS_HOST',
     'REDIS_PORT',
-    'REDIS_USERNAME',
-    'REDIS_PASSWORD',
 
     'EMAIL_HOST',
     'EMAIL_PORT',
@@ -180,8 +176,6 @@ const loadEnvVarbles = (): EnvInterfaces => {
 
     REDIS_HOST: process.env.REDIS_HOST as string,
     REDIS_PORT: process.env.REDIS_PORT as string,
-    REDIS_USERNAME: process.env.REDIS_USERNAME as string,
-    REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
 
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD as string,
     EMAIL_USER: process.env.EMAIL_USER as string,

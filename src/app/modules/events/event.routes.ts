@@ -19,6 +19,10 @@ router.post(
 
 // GET EVENTS
 router.get('/', checkAuth(...Object.keys(Role)), eventControllers.getEvents);
+
+// GET PREVIOUS COMPLETED EVENTS
+router.get('/previous_event', checkAuth(...Object.keys(Role)), eventControllers.getPreviousEvents);
+
 // GET INTEREST BASED EVENT
 router.get(
   '/interested_event',
@@ -31,6 +35,7 @@ router.get(
   checkAuth(...Object.keys(Role)),
   eventControllers.getEventDetails
 );
+
 // UPDATE EVENT
 router.patch(
   '/:eventId',
@@ -39,12 +44,15 @@ router.patch(
   validateRequest(eventUpdateSchema),
   eventControllers.updateEvent
 );
+
 // GET MY EVENT
 router.get(
   '/my_events',
   checkAuth(...Object.keys(Role)),
   eventControllers.getMyEvents
 );
+
+// GET EVENT ANYLYTICS
 router.get(
   '/event_analytics/:eventId',
   checkAuth(...Object.keys(Role)),

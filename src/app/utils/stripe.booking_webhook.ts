@@ -15,11 +15,13 @@ import Group from '../modules/groups/group.model';
 import { GroupMemberRole } from '../modules/groups/group.interface';
 import { Types } from 'mongoose';
 import { io } from '../socket';
+import { trackEventBooking } from './eventBookingCount';
 
 // PYAMENT SUCCESS HANDLE
 export const payemntSuccessHandler = async (object: any) => {
   // Meta Data From Payment to update DB
   const metadata = object.metadata;
+  
 
   if (metadata.booking && metadata.payment && metadata.transaction_id) {
     const paymentPayload: Partial<IPayment> = {
@@ -39,6 +41,7 @@ export const payemntSuccessHandler = async (object: any) => {
     };
 
     // UPDATE DATABASE
+    // UPDATE PAYMENT DATA
     const paymentPromise = Payment.findByIdAndUpdate(
       metadata.payment,
       {
@@ -54,6 +57,7 @@ export const payemntSuccessHandler = async (object: any) => {
       { new: true, runValidators: true }
     );
 
+    // UPDATE BOOKING DATA
     const bookingConfirmPromise = Booking.findByIdAndUpdate(
       metadata.booking,
       { booking_status: BookingStatus.CONFIRMED },
@@ -66,9 +70,10 @@ export const payemntSuccessHandler = async (object: any) => {
       bookingConfirmPromise,
     ]);
 
+
     // ADD USER TO EVENT CHAT GROUP
     const joinUserToEventChatGroup = await Group.findOne({
-      event: metadata.event,
+      event: bookingConfirm?.event,
     });
 
     if (joinUserToEventChatGroup) {
@@ -86,6 +91,7 @@ export const payemntSuccessHandler = async (object: any) => {
         { event: bookingConfirm?.event },
         { $push: { group_members: memberPayload } }
       );
+      
 
       io.to(memberPayload.user.toString() as string).emit('notification', {
         user: memberPayload.user,
@@ -98,6 +104,15 @@ export const payemntSuccessHandler = async (object: any) => {
         },
       });
     }
+
+    // ADD TRENDING BOOKING COUNT
+    setImmediate(async () => {
+      try {
+        await trackEventBooking(bookingConfirm?.event.toString() as string);
+      } catch (error) {
+        console.log("Trending event booking count error: ", error)
+      }
+    })
 
     // NOTIFY USER HE IS JOINED THE EVENT
     if (
@@ -276,10 +291,10 @@ export const paymentCanceledHandler = async (paymentIntent: any) => {
 export const chargeSucceededHandler = async (object: any) => {
   try {
     const metadata = object.metadata;
+    
     if (
-      metadata.event &&
-      metadata.package &&
-      metadata.sponsored &&
+      metadata.transaction_id &&
+      metadata.booking &&
       metadata.payment
     ) {
       await Payment.findByIdAndUpdate(object.metadata.payment, {

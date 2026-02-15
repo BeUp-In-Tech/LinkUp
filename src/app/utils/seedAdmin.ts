@@ -18,7 +18,7 @@ export const adminCreate = async () => {
     };
 
     const payload: IUser = {
-      fullName: 'Nayem',
+      fullName: 'Aj Vandu',
       email: env?.ADMIN_GMAIL,
       password: env?.ADMIN_PASSWORD,
       role: Role.ADMIN,
@@ -27,7 +27,7 @@ export const adminCreate = async () => {
     };
 
     const super_admin = await User.create(payload);
-    console.log(super_admin);
+    console.log(`Super admin created!`);
 
     await NotificationPreference.create({
       user: super_admin._id,
