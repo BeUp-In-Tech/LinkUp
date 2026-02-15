@@ -5,7 +5,7 @@ const trendingSchema = new Schema<ITrendingEvent>(
   {
     event: {
       type: mongoose.Types.ObjectId,
-      ref: "events",
+      ref: "event",
       required: true,
       unique: true
     },
