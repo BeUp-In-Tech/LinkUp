@@ -7,7 +7,6 @@ const getTrendingEventsService = async (query: Record<string, string>) => {
   const skip = (page - 1) * limit;
 
   const result = await Trending.aggregate([
-
     // ----- Trending Score Calculation -----
     {
       $addFields: {
@@ -48,6 +47,7 @@ const getTrendingEventsService = async (query: Record<string, string>) => {
       }
     },
 
+
     // ----- Pagination + Count -----
     {
       $facet: {
@@ -70,6 +70,14 @@ const getTrendingEventsService = async (query: Record<string, string>) => {
             }
           },
           { $unwind: "$event" },
+
+
+          // Fetch only upcomming trending events
+          {
+            $match: {
+              "event.event_end": {$gte: new Date()}
+            }
+          },
 
           // Optional projection (performance boost)
           {

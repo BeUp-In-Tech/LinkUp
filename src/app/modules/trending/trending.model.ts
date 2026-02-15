@@ -1,11 +1,12 @@
-import mongoose, { model, Schema } from "mongoose";
+// import mongoose, { model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import { ITrendingEvent } from "./trending.interface";
 
 const trendingSchema = new Schema<ITrendingEvent>(
   {
     event: {
-      type: mongoose.Types.ObjectId,
-      ref: "event",
+      type: Schema.Types.ObjectId,
+      ref: "events",
       required: true,
       unique: true
     },
