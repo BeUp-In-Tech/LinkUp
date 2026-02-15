@@ -18,7 +18,6 @@ import axios from 'axios';
 import EventVote from '../voting/voting.model';
 import { VotingType } from '../voting/voting.interface';
 import { redisClient } from '../../config/redis.config';
-import { sendEmail } from '../../utils/sendMail';
 import { deleteImageFromCLoudinary } from '../../config/cloudinary.config';
 import { twilio } from '../../config/twilio.config';
 
@@ -413,7 +412,7 @@ const verifyUserService = async (userId: string) => {
     EX: 300,
   });
 
-  const sendMessage = await twilio.messages.create({
+  await twilio.messages.create({
       to: findUser.phone as string,
       body: `Your verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`
   })
