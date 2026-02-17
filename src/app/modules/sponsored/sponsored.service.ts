@@ -108,27 +108,23 @@ const sponsoredPaymentIntentService = async (
   });
 
   // ALREADY APPROVED SPONSOSHIP
-const alreadySponsored = await Sponsored.findOne({
-  event: eventId,
-  sponsor_status: SponsorStatus.APPROVED,
-  sponsor_type: pkgType,
-  user: userId,
-  endDate: { $gt: new Date() },   // only active
-}).sort({ endDate: -1 });          // latest
+  const alreadySponsored = await Sponsored.findOne({
+    event: eventId,
+    sponsor_status: SponsorStatus.APPROVED,
+    sponsor_type: pkgType,
+    user: userId,
+    endDate: { $gt: new Date() }, // only active
+  }).sort({ endDate: -1 }); // latest
 
+  // SAME SPONSORESHIP CAN'T SPONOSRED UNTILL CURRENT SPONSORESHIP EXPIRED
+  if (alreadySponsored) {
+    throw new AppError(
+      StatusCodes.CONFLICT,
+      `You already  ${alreadySponsored.sponsor_type} this event!`
+    );
+  }
 
-
-// SAME SPONSORESHIP CAN'T SPONOSRED UNTILL CURRENT SPONSORESHIP EXPIRED
-if (alreadySponsored) {
-  throw new AppError(
-    StatusCodes.CONFLICT,
-    `You already  ${alreadySponsored.sponsor_type} this event!`
-  );
-}
-
-
-
-// PAYMENT INITIALIZATION
+  // PAYMENT INITIALIZATION
   let payment;
 
   if (!sponsored) {

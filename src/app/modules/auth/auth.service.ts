@@ -202,11 +202,10 @@ const resetPasswordService = async (token: string, newPassword: string) => {
   return null;
 };
 
-
 export const authService = {
   getNewAccessTokenService,
   changePasswordService,
   forgetPasswrodService,
   verifyOTPService,
-  resetPasswordService
+  resetPasswordService,
 };

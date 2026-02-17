@@ -58,7 +58,8 @@ const getConnectedBankAccount = CatchAsync(
 const getStripeVendorLoginLink = CatchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.user as JwtPayload;
-    const result = await paymentServices.getStripeVendorLoginLinkService(userId);
+    const result =
+      await paymentServices.getStripeVendorLoginLinkService(userId);
 
     SendResponse(res, {
       success: true,
@@ -137,5 +138,5 @@ export const paymentControllers = {
   transactionHistory,
   allTransactionHistory,
   handleSponsoredWebHook,
-  getStripeVendorLoginLink
+  getStripeVendorLoginLink,
 };

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import mongoose from "mongoose";
-import env from "../config/env";
-import { expiredBoostEventsCron } from "./cleanUpBoostEvent";
+import mongoose from 'mongoose';
+import env from '../config/env';
+import { expiredBoostEventsCron } from './cleanUpBoostEvent';
 
 const startCronWorker = async () => {
   try {

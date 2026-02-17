@@ -112,7 +112,7 @@ const userVefification = CatchAsync(async (req: Request, res: Response) => {
 // RESEND OTP
 const verifyOTP = CatchAsync(async (req: Request, res: Response) => {
   const { otp } = req.body;
-   const user = req.user as JwtPayload;
+  const user = req.user as JwtPayload;
   await userServices.verifyOTPService(user.userId as string, otp as string);
 
   SendResponse(res, {

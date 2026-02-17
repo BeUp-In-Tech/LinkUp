@@ -1,34 +1,34 @@
 // import mongoose, { model, Schema } from "mongoose";
-import { model, Schema } from "mongoose";
-import { ITrendingEvent } from "./trending.interface";
+import { model, Schema } from 'mongoose';
+import { ITrendingEvent } from './trending.interface';
 
 const trendingSchema = new Schema<ITrendingEvent>(
   {
     event: {
       type: Schema.Types.ObjectId,
-      ref: "events",
+      ref: 'events',
       required: true,
-      unique: true
+      unique: true,
     },
 
     total_views: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     total_bookings: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     last_interaction: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   {
     versionKey: false,
-    timestamps: true
+    timestamps: true,
   }
 );
 
@@ -36,6 +36,6 @@ trendingSchema.index({ event: 1 });
 trendingSchema.index({ last_interaction: -1 });
 
 export const Trending = model<ITrendingEvent>(
-  "trending_events",
+  'trending_events',
   trendingSchema
 );

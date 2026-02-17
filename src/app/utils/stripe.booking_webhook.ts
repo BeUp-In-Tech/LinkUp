@@ -21,7 +21,6 @@ import { trackEventBooking } from './eventBookingCount';
 export const payemntSuccessHandler = async (object: any) => {
   // Meta Data From Payment to update DB
   const metadata = object.metadata;
-  
 
   if (metadata.booking && metadata.payment && metadata.transaction_id) {
     const paymentPayload: Partial<IPayment> = {
@@ -70,7 +69,6 @@ export const payemntSuccessHandler = async (object: any) => {
       bookingConfirmPromise,
     ]);
 
-
     // ADD USER TO EVENT CHAT GROUP
     const joinUserToEventChatGroup = await Group.findOne({
       event: bookingConfirm?.event,
@@ -91,7 +89,6 @@ export const payemntSuccessHandler = async (object: any) => {
         { event: bookingConfirm?.event },
         { $push: { group_members: memberPayload } }
       );
-      
 
       io.to(memberPayload.user.toString() as string).emit('notification', {
         user: memberPayload.user,
@@ -110,9 +107,9 @@ export const payemntSuccessHandler = async (object: any) => {
       try {
         await trackEventBooking(bookingConfirm?.event.toString() as string);
       } catch (error) {
-        console.log("Trending event booking count error: ", error)
+        console.log('Trending event booking count error: ', error);
       }
-    })
+    });
 
     // NOTIFY USER HE IS JOINED THE EVENT
     if (
@@ -291,12 +288,8 @@ export const paymentCanceledHandler = async (paymentIntent: any) => {
 export const chargeSucceededHandler = async (object: any) => {
   try {
     const metadata = object.metadata;
-    
-    if (
-      metadata.transaction_id &&
-      metadata.booking &&
-      metadata.payment
-    ) {
+
+    if (metadata.transaction_id && metadata.booking && metadata.payment) {
       await Payment.findByIdAndUpdate(object.metadata.payment, {
         invoiceURL: object.receipt_url,
       });

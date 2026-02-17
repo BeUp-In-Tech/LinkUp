@@ -6,7 +6,7 @@ import env from './env';
 export const redisClient = createClient({
   socket: {
     host: env.REDIS_HOST,
-    port: Number(env.REDIS_PORT)
+    port: Number(env.REDIS_PORT),
   },
 });
 

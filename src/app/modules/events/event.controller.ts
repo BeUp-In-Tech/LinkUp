@@ -323,5 +323,5 @@ export const eventControllers = {
   getJoinRequest,
   myCoHostInvitation,
   checkPrivateEventApproval,
-  getPreviousEvents
+  getPreviousEvents,
 };

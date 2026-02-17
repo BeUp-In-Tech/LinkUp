@@ -115,7 +115,7 @@ const getStripeVendorLoginLinkService = async (userId: string) => {
   }
 
   if (!user.stripeAccountId) {
-    throw new AppError(400, "No connected payout account found!");
+    throw new AppError(400, 'No connected payout account found!');
   }
 
   // generate link
@@ -268,5 +268,5 @@ export const paymentServices = {
   getTransactionHistory,
   getAllTransactionHistory,
   handleSponsoredWebHookService,
-  getStripeVendorLoginLinkService
+  getStripeVendorLoginLinkService,
 };

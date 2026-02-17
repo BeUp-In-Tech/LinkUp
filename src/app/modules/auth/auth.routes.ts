@@ -25,6 +25,13 @@ router.post(
 
 // GOOGLE LOGIN HANDLE
 router.get('/google', authController.googleLogin);
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login', session: false }), authController.googleCallback);
+router.get(
+  '/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/login',
+    session: false,
+  }),
+  authController.googleCallback
+);
 
 export const authRouter = router;

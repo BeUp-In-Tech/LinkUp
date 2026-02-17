@@ -20,9 +20,6 @@ import User from '../modules/users/user.model';
 import { sendPersonalNotification } from './notificationsendhelper/user.notification.utils';
 import { sendEmail } from './sendMail';
 
-
-
-
 // SPONSORSHIP PAYMENT SUCCESS HANDLER
 export const sponsoredSuccessHandler = async (paymentIntent: any) => {
   // Meta Data From Payment to update DB
@@ -87,7 +84,7 @@ export const sponsoredSuccessHandler = async (paymentIntent: any) => {
       // BOOST ADD
       if (sponsoredPackage.type === SponsoredPackageType.BOOST) {
         await Event.findByIdAndUpdate(metadata.event, { boosted: true });
-      } 
+      }
 
       // RESOLVE PROMISE
       const [payment, sponsored] = await Promise.all([
@@ -141,7 +138,7 @@ export const sponsoredSuccessHandler = async (paymentIntent: any) => {
                 support_email: env?.ADMIN_GMAIL,
                 amount: payment.transaction_amount,
                 currency: payment.currency,
-                date: dayjs(new Date()).format("dddd, MMMM D, YYYY h:mm A")
+                date: dayjs(new Date()).format('dddd, MMMM D, YYYY h:mm A'),
               },
             });
           }

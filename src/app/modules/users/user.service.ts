@@ -412,11 +412,11 @@ const verifyUserService = async (userId: string) => {
     EX: 300,
   });
 
-   await twilio.messages.create({
-      to: findUser.phone as string,
-      from: env.TWILIO_PHONE_NUMBER,
-      body: `Your verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`
-  })
+  await twilio.messages.create({
+    to: findUser.phone as string,
+    from: env.TWILIO_PHONE_NUMBER,
+    body: `Your verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`,
+  });
 
   return null;
 };

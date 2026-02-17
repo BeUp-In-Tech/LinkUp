@@ -42,7 +42,6 @@ import { sendPushAndSave } from '../../utils/notificationsendhelper/push.notific
 import BlockedUser from '../BlockedUser/blocked.model';
 import { trackEventView } from '../../utils/eventViewCount';
 
-
 // CREATE EVENT SERVICE
 const createEventService = async (payload: IEvent, _user: JwtPayload) => {
   const user = await User.findOne({ _id: _user.userId });
@@ -190,7 +189,13 @@ const getEventsService = async (
 
 // GET PREVIOUS COMPLETED EVENT
 const getPreviousEventService = async (query: Record<string, string>) => {
-  const queryBuilder = new QueryBuilder(Event.find({ event_end: {$lte: new Date()}, event_status: EventStatus.COMPLETED }), query);
+  const queryBuilder = new QueryBuilder(
+    Event.find({
+      event_end: { $lte: new Date() },
+      event_status: EventStatus.COMPLETED,
+    }),
+    query
+  );
   const previousEvents = await queryBuilder
     .filter()
     .category()
@@ -201,13 +206,13 @@ const getPreviousEventService = async (query: Record<string, string>) => {
     .join()
     .build();
 
-    // Meta data
+  // Meta data
   const metaData = await queryBuilder.getMeta();
   return {
     metaData,
     previousEvents,
   };
-}
+};
 
 // GET USER INTERESTED EVENTS
 const getInterestEventsService = async (
@@ -274,11 +279,10 @@ const getEventDetailsService = async (_user: JwtPayload, eventId: string) => {
     throw new AppError(StatusCodes.BAD_REQUEST, 'No event found!');
   }
 
-
   // TRACK EVENT VIEW
   setImmediate(async () => {
-    await  trackEventView(eventId);
-  })
+    await trackEventView(eventId);
+  });
 
   return { totalJoined, totalJoinedMembers, ...event.toObject() };
 };
@@ -703,16 +707,16 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
     // Stage 2: Projection
     {
       $lookup: {
-        from: "payments",
-        localField: "payment",
-        foreignField: "_id",
-        as: "payment"
-      }
+        from: 'payments',
+        localField: 'payment',
+        foreignField: '_id',
+        as: 'payment',
+      },
     },
 
     // Stage 3: Unwind
     {
-      $unwind: "$payment"
+      $unwind: '$payment',
     },
     // Stage 4: Total Revenue Calculation
     {
@@ -726,7 +730,7 @@ const geteventAnalyticsService = async (userId: string, eventId: string) => {
     {
       $project: {
         _id: 0,
-      }
+      },
     },
   ]);
 
@@ -1132,5 +1136,5 @@ export const eventServices = {
   getJoinRequestService,
   myCoHostInvitation,
   checkPrivateEventApprovalService,
-  getPreviousEventService
+  getPreviousEventService,
 };

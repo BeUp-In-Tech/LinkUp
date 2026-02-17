@@ -25,7 +25,11 @@ router.get(
 );
 
 // GENERATE STRIPE VENDOR LOGIN LINK
-router.get('/stripe_dashboard_login', checkAuth(...Object.keys(Role)), paymentControllers.getStripeVendorLoginLink);
+router.get(
+  '/stripe_dashboard_login',
+  checkAuth(...Object.keys(Role)),
+  paymentControllers.getStripeVendorLoginLink
+);
 
 // GET TRANSACTION HISTORY
 router.get(

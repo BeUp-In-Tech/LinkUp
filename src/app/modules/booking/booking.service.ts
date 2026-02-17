@@ -30,7 +30,10 @@ const bookingIntentService = async (
     throw new AppError(StatusCodes.NOT_FOUND, 'Event not found!');
 
   if (isEventExist.event_status === EventStatus.COMPLETED) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "This event has been finished, you can't join.")
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      "This event has been finished, you can't join."
+    );
   }
 
   const isUser = await User.findOne({ _id: userId });
@@ -98,7 +101,6 @@ const bookingIntentService = async (
     booking.payment = payment._id;
     await booking.save();
   } else {
-    
     // REUSE EXISTING PAYMENT RECORD
     payment = await Payment.findOne({ booking: booking._id });
     if (!payment) {
@@ -113,11 +115,10 @@ const bookingIntentService = async (
       await booking.save();
     }
 
-
     // Why re-generate?
     // For Stripe idempotencyKey. Strip do not accept payment if the idempotencyKey key same (When re pay).
     // So this new transaction id will generate new idempotencyKey key later
-    payment.transaction_id = generateTransactionId(); 
+    payment.transaction_id = generateTransactionId();
     await payment.save();
   }
 
@@ -149,8 +150,8 @@ const bookingIntentService = async (
   // 8. IDEMPOTENCY
   // Now strictly tied to the specific booking ID.
   // Since we reuse pending bookings (Step 5), this key stays the same for retries!
-  
-  const idempotencyKey = `booking_${booking._id}_txn_${payment.transaction_id}`; 
+
+  const idempotencyKey = `booking_${booking._id}_txn_${payment.transaction_id}`;
 
   const paymentIntent = await stripe.paymentIntents.create(paymentIntentData, {
     idempotencyKey,

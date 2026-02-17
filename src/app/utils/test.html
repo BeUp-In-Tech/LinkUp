@@ -1,230 +1,251 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your Event Has Been Sponsored</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-        }
-        .header {
-            background-color: #667eea;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        .header h1 {
-            color: #ffffff;
-            margin: 0;
-            font-size: 26px;
-            font-weight: 600;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        background-color: #f4f4f4;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+      }
+      .header {
+        background-color: #667eea;
+        padding: 40px 30px;
+        text-align: center;
+      }
+      .header h1 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 26px;
+        font-weight: 600;
+      }
+      .content {
+        padding: 40px 30px;
+      }
+      .success-badge {
+        display: inline-block;
+        background-color: #10b981;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .content h2 {
+        color: #1f2937;
+        font-size: 22px;
+        margin: 0 0 10px 0;
+        font-weight: 600;
+      }
+      .content p {
+        color: #4b5563;
+        line-height: 1.6;
+        margin: 0 0 15px 0;
+        font-size: 15px;
+      }
+      .event-details {
+        background-color: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 25px;
+        margin: 25px 0;
+      }
+      .event-details h3 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        color: #1f2937;
+        font-weight: 600;
+      }
+      .detail-row {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .detail-row:last-child {
+        border-bottom: none;
+      }
+      .detail-label {
+        font-weight: 600;
+        color: #374151;
+        min-width: 100px;
+        font-size: 14px;
+      }
+      .detail-value {
+        color: #1f2937;
+        font-size: 14px;
+        flex: 1;
+      }
+      .sponsor-section {
+        background-color: #fffbeb;
+        border: 1px solid #fbbf24;
+        border-radius: 8px;
+        padding: 20px 25px;
+        margin: 25px 0;
+      }
+      .sponsor-section h3 {
+        margin: 0 0 15px 0;
+        font-size: 18px;
+        color: #92400e;
+        font-weight: 600;
+      }
+      .sponsor-section p {
+        margin: 0 0 10px 0;
+        color: #78350f;
+        font-size: 15px;
+      }
+      .sponsor-name {
+        font-weight: 700;
+        font-size: 16px;
+        color: #92400e;
+      }
+      .benefit-item {
+        padding: 10px 0;
+        color: #4b5563;
+        font-size: 14px;
+        line-height: 1.5;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .benefit-item:last-child {
+        border-bottom: none;
+      }
+      .benefit-item strong {
+        color: #1f2937;
+      }
+      .cta-button {
+        display: inline-block;
+        background-color: #667eea;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 32px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 15px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .info-text {
+        background-color: #f0f9ff;
+        border-left: 4px solid #3b82f6;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+      .info-text p {
+        margin: 0;
+        color: #1e40af;
+        font-size: 14px;
+      }
+      .footer {
+        background-color: #f9fafb;
+        padding: 30px;
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+      }
+      .footer p {
+        color: #6b7280;
+        font-size: 14px;
+        margin: 5px 0;
+      }
+      .footer a {
+        color: #667eea;
+        text-decoration: none;
+      }
+      @media only screen and (max-width: 600px) {
         .content {
-            padding: 40px 30px;
-        }
-        .success-badge {
-            display: inline-block;
-            background-color: #10b981;
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .content h2 {
-            color: #1f2937;
-            font-size: 22px;
-            margin: 0 0 10px 0;
-            font-weight: 600;
-        }
-        .content p {
-            color: #4b5563;
-            line-height: 1.6;
-            margin: 0 0 15px 0;
-            font-size: 15px;
-        }
-        .event-details {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 25px;
-            margin: 25px 0;
-        }
-        .event-details h3 {
-            margin: 0 0 20px 0;
-            font-size: 18px;
-            color: #1f2937;
-            font-weight: 600;
+          padding: 30px 20px;
         }
         .detail-row {
-            display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .detail-row:last-child {
-            border-bottom: none;
+          flex-direction: column;
         }
         .detail-label {
-            font-weight: 600;
-            color: #374151;
-            min-width: 100px;
-            font-size: 14px;
+          margin-bottom: 5px;
         }
-        .detail-value {
-            color: #1f2937;
-            font-size: 14px;
-            flex: 1;
-        }
-        .sponsor-section {
-            background-color: #fffbeb;
-            border: 1px solid #fbbf24;
-            border-radius: 8px;
-            padding: 20px 25px;
-            margin: 25px 0;
-        }
-        .sponsor-section h3 {
-            margin: 0 0 15px 0;
-            font-size: 18px;
-            color: #92400e;
-            font-weight: 600;
-        }
-        .sponsor-section p {
-            margin: 0 0 10px 0;
-            color: #78350f;
-            font-size: 15px;
-        }
-        .sponsor-name {
-            font-weight: 700;
-            font-size: 16px;
-            color: #92400e;
-        }
-        .benefit-item {
-            padding: 10px 0;
-            color: #4b5563;
-            font-size: 14px;
-            line-height: 1.5;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        .benefit-item:last-child {
-            border-bottom: none;
-        }
-        .benefit-item strong {
-            color: #1f2937;
-        }
-        .cta-button {
-            display: inline-block;
-            background-color: #667eea;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 32px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 15px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .info-text {
-            background-color: #f0f9ff;
-            border-left: 4px solid #3b82f6;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        .info-text p {
-            margin: 0;
-            color: #1e40af;
-            font-size: 14px;
-        }
-        .footer {
-            background-color: #f9fafb;
-            padding: 30px;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
-        }
-        .footer p {
-            color: #6b7280;
-            font-size: 14px;
-            margin: 5px 0;
-        }
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-        @media only screen and (max-width: 600px) {
-            .content {
-                padding: 30px 20px;
-            }
-            .detail-row {
-                flex-direction: column;
-            }
-            .detail-label {
-                margin-bottom: 5px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="email-container">
-        <div class="header">
-            <h1>Event Boosting Confirmation</h1>
+      <div class="header">
+        <h1>Event Boosting Confirmation</h1>
+      </div>
+
+      <div class="content">
+        <div style="text-align: center">
+          <span class="success-badge">✓ Boosted</span>
         </div>
-        
-        <div class="content">
-            <div style="text-align: center;">
-                <span class="success-badge">✓ Boosted</span>
-            </div>
-            
-            <h2>Your Event Has Been Sponsored</h2>
-            
-            <p>Dear Host,</p>
-            
-            <p>We're pleased to inform you that your event on LinkUp has been successfully boosted. This boosting will provide your event with enhanced visibility and promotional support on our platform.</p>
-            
-            <div class="event-details">
-                <h3>Event Information</h3>
-                <div class="detail-row">
-                    <div class="detail-label">Event Title:</div>
-                    <div class="detail-value"> <%= event_title %></div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Venue:</div>
-                    <div class="detail-value"> <%= event_venue %></div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Event Start Date:</div>
-                    <div class="detail-value"> <%= event_date %></div>
-                </div>
-            </div>
-            
-            <div class="sponsor-section">
-                <h3>Sponsorship Details</h3>
-                <p>Your event is now sponsored by:</p>
-                <p class="sponsor-name"> <%= sponsor_name %></p>
-            </div>
-            
-            <div class="info-text">
-                <p>We recommend reviewing your event details to ensure all information is current and complete to maximize engagement with potential attendees.</p>
-            </div>
-            
-            <p style="margin-top: 30px;">If you have any questions regarding your sponsorship or need assistance with your event, please don't hesitate to reach out to our support team.</p>
-            
-            <p style="margin-top: 20px;">Best regards,<br><strong>The LinkUp Team</strong></p>
+
+        <h2>Your Event Has Been Sponsored</h2>
+
+        <p>Dear Host,</p>
+
+        <p>
+          We're pleased to inform you that your event on LinkUp has been
+          successfully boosted. This boosting will provide your event with
+          enhanced visibility and promotional support on our platform.
+        </p>
+
+        <div class="event-details">
+          <h3>Event Information</h3>
+          <div class="detail-row">
+            <div class="detail-label">Event Title:</div>
+            <div class="detail-value"><%= event_title %></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Venue:</div>
+            <div class="detail-value"><%= event_venue %></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Event Start Date:</div>
+            <div class="detail-value"><%= event_date %></div>
+          </div>
         </div>
-        
-        <div class="footer">
-            <p><strong>Need Assistance?</strong></p>
-            <p>Contact us at <a href="mailto:<%= support_email %>"><%= support_email %></a></p>
-            <p style="margin-top: 20px; font-size: 12px;">© 2024 LinkUp. All rights reserved.</p>
+
+        <div class="sponsor-section">
+          <h3>Sponsorship Details</h3>
+          <p>Your event is now sponsored by:</p>
+          <p class="sponsor-name"><%= sponsor_name %></p>
         </div>
+
+        <div class="info-text">
+          <p>
+            We recommend reviewing your event details to ensure all information
+            is current and complete to maximize engagement with potential
+            attendees.
+          </p>
+        </div>
+
+        <p style="margin-top: 30px">
+          If you have any questions regarding your sponsorship or need
+          assistance with your event, please don't hesitate to reach out to our
+          support team.
+        </p>
+
+        <p style="margin-top: 20px">
+          Best regards,<br /><strong>The LinkUp Team</strong>
+        </p>
+      </div>
+
+      <div class="footer">
+        <p><strong>Need Assistance?</strong></p>
+        <p>
+          Contact us at
+          <a href="mailto:<%= support_email %>"><%= support_email %></a>
+        </p>
+        <p style="margin-top: 20px; font-size: 12px">
+          © 2024 LinkUp. All rights reserved.
+        </p>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -21,7 +21,11 @@ router.post(
 router.get('/', checkAuth(...Object.keys(Role)), eventControllers.getEvents);
 
 // GET PREVIOUS COMPLETED EVENTS
-router.get('/previous_event', checkAuth(...Object.keys(Role)), eventControllers.getPreviousEvents);
+router.get(
+  '/previous_event',
+  checkAuth(...Object.keys(Role)),
+  eventControllers.getPreviousEvents
+);
 
 // GET INTEREST BASED EVENT
 router.get(
