@@ -5,9 +5,8 @@ import { randomOTPGenerator } from '../../utils/randomOTPGenerator';
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import { validatePhone } from '../../utils/phoneNumberValidatior';
-import mongoose, { Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { QueryBuilder } from '../../utils/QueryBuilder';
-import { NotificationPreference } from '../notifications/notification.model';
 import Booking from '../booking/booking.model';
 import Event from '../events/event.model';
 import BlockedUser from '../BlockedUser/blocked.model';
@@ -20,6 +19,7 @@ import { VotingType } from '../voting/voting.interface';
 import { redisClient } from '../../config/redis.config';
 import { deleteImageFromCLoudinary } from '../../config/cloudinary.config';
 import { twilio } from '../../config/twilio.config';
+import { NotificationPreferenceCreate } from '../../utils/notificationPreferenceCreate';
 
 // CREATE USER
 const createUserService = async (payload: Partial<IUser>) => {
@@ -49,24 +49,7 @@ const createUserService = async (payload: Partial<IUser>) => {
   const creatUser = await User.create(userPayload); // Create user
 
   // Notification preference setup can be added here in future
-  await NotificationPreference.create({
-    user: new mongoose.Types.ObjectId(creatUser?._id),
-    channel: {
-      push: true,
-      email: true,
-      inApp: true,
-    },
-    directmsg: true,
-    app: {
-      product_updates: true,
-      special_offers: true,
-    },
-    event: {
-      event_invitations: true,
-      event_changes: true,
-      event_reminders: true,
-    },
-  });
+  NotificationPreferenceCreate(creatUser._id.toString());
 
   return creatUser;
 };

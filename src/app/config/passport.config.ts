@@ -11,6 +11,7 @@ import User from '../modules/users/user.model';
 import bcrypt from 'bcrypt';
 import env from './env';
 import { Role } from '../modules/users/user.interface';
+import { NotificationPreferenceCreate } from '../utils/notificationPreferenceCreate';
 
 // CREDENTIALS LOGIN LOCAL STRATEGY
 passport.use(
@@ -88,6 +89,9 @@ passport.use(
             },
           ],
         });
+
+         // Notification preference setup can be added here in future
+          NotificationPreferenceCreate(user._id.toString());
       }
 
       return cb(null, user);

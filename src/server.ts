@@ -40,7 +40,7 @@ process.on('SIGTERM', () => {
   if (server) {
     server.close(() => {
       // server closing
-      console.log('server closed');
+      console.log('server closed for SIGTERM');
       process.exit(1); // exit from server
     });
   } else {
@@ -57,7 +57,7 @@ process.on('SIGINT', (error) => {
   if (server) {
     server.close(() => {
       // server closing
-      console.log('server closed');
+      console.log('server closed for SIGINT');
       process.exit(1); // exit from server
     });
   } else {
