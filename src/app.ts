@@ -89,7 +89,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('<h1>Congratulations! Your server is running</h1>');
+  res.redirect('https://linkupapp.ca');
 });
 
 // GLOBAL ROUTES
