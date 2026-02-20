@@ -70,6 +70,20 @@ const limiter = rateLimit({
     statusCode: 400,
     message: 'Too many requests, please try again later.',
   },
+
+  keyGenerator: (req) => {
+    let ip =
+      req.headers['x-forwarded-for'] ||
+      req.ip ||
+      req.socket.remoteAddress ||
+      '';
+
+    // if proxy sends multiple IPs
+    if (Array.isArray(ip)) ip = ip[0];
+
+    // remove port if exists
+    return String(ip).split(':').pop() as string;
+  },
 });
 
 app.use(limiter);
