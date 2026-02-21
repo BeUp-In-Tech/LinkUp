@@ -42,7 +42,7 @@ export interface ISponsoredship {
 export interface ISponsoredPackage {
   _id?: Types.ObjectId;
   title: string;
-  benifits: string[];
+  benefits: string[];
   price: number;
   type: SponsoredPackageType;
   duration: number; // eg. 7 days / 15 days

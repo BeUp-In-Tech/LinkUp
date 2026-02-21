@@ -36,7 +36,7 @@ const sponsoredSchema = new Schema<ISponsoredship>(
 const sponsoredPackage = new Schema<ISponsoredPackage>(
   {
     title: { type: String, required: true },
-    benifits: [{ type: String, required: true }],
+    benefits : [{ type: String, required: true }],
     price: { type: Number, default: 0, required: true },
     type: {
       type: String,
